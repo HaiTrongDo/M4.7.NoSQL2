@@ -54,19 +54,27 @@ bookRoutes.post('/update', upload.none(), async (req, res) => {
 bookRoutes.get('/list', async (req, res) => {
     try {
         let query = {};
+        console.log(req.query);
         if (req.query.keyword && req.query.keyword !== "") {
             let keywordFind = req.query.keyword || "";
             query = {"keywords.keyword": {$regex: keywordFind}}
         }
         if (req.query.author && req.query.author !== "") {
             let authordFind = req.query.author || "";
-            let author = await Author.findOne({name: {$regex: authordFind}})
+            let author = await Author.find({name: {$regex: authordFind},})
             query = {...query, author: author}
         }
+        if (req.query.category ) {
+            let categoriesFind = req.query.category || "";
+            let author = await Author.find({categories: categoriesFind})
+            query = {...query, author: author}
+        }
+
+        // category: req.query.category
         const books = await Book.find(query)
             .populate([{path: "author", select: "name"} , {path: "categories", select: "name"}])
-        console.log(books);
-        res.render("listBook", {books: books});
+        const listOfCategory = await Category.find()
+        res.render("listBook", {books: books, listOfCategory: listOfCategory});
     } catch {
         res.render("error");
     }

@@ -31,6 +31,13 @@
     <label>Author:</label>
     <input type="text" id="author" name="author">
     </br>
+    <select name="category" id="">
+        <% listOfCategory.forEach(element=>{ %>
+        <option value="<%=element._id%>">
+            <%= element.name %>
+        </option>
+        <% })%>
+    </select>
     <div class="form-group">
         <button type="submit" class="btn btn-primary">Search</button>
     </div>
@@ -43,5 +50,7 @@
 <button onclick="update('<%= book.id %>')">Update </button>
 <button onclick="deleteBook('<%= book.id %>')">Delete </button>
 </br><% } %>
+
+
 </body>
 </html>
